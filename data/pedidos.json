@@ -1,0 +1,42 @@
+[
+  {
+    "fecha_hora": "2026-10-28T01:24:43.654Z",
+    "tipo_entrega": "local",
+    "estado": "listo",
+    "monto_total": 32550,
+    "observacion": null,
+    "cliente": {
+      "nombre": "Fabrizio",
+      "apellido": "Gimenez",
+      "telefono": "3541230976",
+      "direccion": null,
+      "email": "fabrigimenezgamer@gmail.com"
+    },
+    "metodo_pago": "efectivo",
+    "estado_pago": "pendiente",
+    "items": [
+      {
+        "id_producto": 1,
+        "nombre": "Lomo completo",
+        "cantidad": 2,
+        "precio": 12800,
+        "subtotal": 25600
+      },
+      {
+        "id_producto": 12,
+        "nombre": "Coca cola 1.5L",
+        "cantidad": 1,
+        "precio": 2200,
+        "subtotal": 2200
+      },
+      {
+        "id_producto": 13,
+        "nombre": "Fanta 1.5L",
+        "cantidad": 1,
+        "precio": 4750,
+        "subtotal": 4750
+      }
+    ],
+    "id_pedido": 1
+  }
+]

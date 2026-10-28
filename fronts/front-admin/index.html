@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos - Como en Casa</title>
+    <style>
+        body {
+            margin: 0;
+            background: #f3ece1;
+            font-family: system-ui, Segoe UI, sans-serif;
+            color: #2b2b2b;
+        }
+
+        header {
+            background: #c8391a;
+            color: #fff;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: block;
+            width: min(100%, 240px);
+            max-height: 72px;
+            object-fit: contain;
+        }
+
+        header a {
+            color: #fff;
+            font-size: .9rem;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .barra {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filtro {
+            padding: 8px 14px;
+            border: 1px solid #e8dccb;
+            background: #fff;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .filtro.activo {
+            background: #c8391a;
+            color: #fff;
+            border-color: #c8391a;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 12px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e8dccb;
+            border-radius: 12px;
+            padding: 14px;
+        }
+
+        .card h3 {
+            margin: 0 0 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card small {
+            color: #6b6b6b;
+        }
+
+        .items {
+            margin: 8px 0;
+            padding-left: 18px;
+        }
+
+        .obs {
+            background: #fff8e1;
+            border-radius: 8px;
+            padding: 6px 8px;
+            font-size: .85rem;
+            margin: 6px 0;
+        }
+
+        .estado {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: .8rem;
+            font-weight: 700;
+        }
+
+        .estado.prep {
+            background: #fff0c2;
+            color: #7a5a00;
+        }
+
+        .estado.listo {
+            background: #d8f3dc;
+            color: #1b6b34;
+        }
+
+        .estado.cancelado {
+            background: #fde8e4;
+            color: #8a2310;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .acciones button {
+            flex: 1;
+            padding: 9px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .b-listo {
+            background: #2e9e4f;
+        }
+
+        .b-cancel {
+            background: #c8391a;
+        }
+
+        .vacio {
+            color: #6b6b6b;
+            text-align: center;
+            padding: 40px;
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img class="logo" src="/imagen/Logo%20de%20como%20en%20casa.webp" alt="Como en Casa">
+        <a href="/cerrar-sesion">Cerrar sesión</a>
+    </header>
+
+    <main>
+        <!-- Filtros por estado -->
+        <div class="barra">
+            <button type="button" class="filtro activo" data-estado="en preparación" onclick="filtrar(this)">En
+                preparación</button>
+            <button type="button" class="filtro" data-estado="listo" onclick="filtrar(this)">Listos</button>
+            <button type="button" class="filtro" data-estado="cancelado" onclick="filtrar(this)">Cancelados</button>
+            <button type="button" class="filtro" data-estado="" onclick="filtrar(this)">Todos</button>
+        </div>
+
+        <div class="grid" id="pedidos"></div>
+    </main>
+
+    <script>
+        let estadoActual = 'en preparación'
+
+        function esc(texto) {
+            return String(texto ?? '').replace(/[&<>"']/g, (c) => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[c]))
+        }
+
+        function plata(numero) {
+            return '$' + Number(numero).toLocaleString('es-AR')
+        }
+
+        function claseEstado(estado) {
+            if (estado === 'listo') return 'listo'
+            if (estado === 'cancelado') return 'cancelado'
+            return 'prep'
+        }
+
+        function mostrarPedidos(pedidos) {
+            const contenedor = document.getElementById('pedidos')
+
+            if (!pedidos || pedidos.length === 0) {
+                contenedor.innerHTML = '<p class="vacio">No hay pedidos para mostrar.</p>'
+                return
+            }
+
+            let contenidohtml = ''
+            pedidos.forEach((p) => {
+                const hora = new Date(p.fecha_hora).toLocaleString('es-AR', {
+                    day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
+                })
+
+                let items = ''
+                p.items.forEach((i) => {
+                    items += `<li>${i.cantidad} × ${esc(i.nombre)}</li>`
+                })
+
+                const entrega = p.tipo_entrega === 'delivery'
+                    ? 'Delivery: ' + esc(p.direccion || 'sin dirección')
+                    : 'Retira en el local'
+
+                const observacion = p.observacion
+                    ? `<div class="obs">📝 ${esc(p.observacion)}</div>`
+                    : ''
+
+                const acciones = p.estado === 'en preparación'
+                    ? `<div class="acciones">
+               <button type="button" class="b-listo" onclick="cambiarEstado(${p.id_pedido}, 'listo')">Marcar listo</button>
+               <button type="button" class="b-cancel" onclick="cambiarEstado(${p.id_pedido}, 'cancelado')">Cancelar</button>
+             </div>`
+                    : ''
+
+                contenidohtml += `
+          <article class="card">
+            <h3><span>#${p.id_pedido} · ${esc(p.nombre)} ${esc(p.apellido)}</span><span>${plata(p.monto_total)}</span></h3>
+            <small>${hora} · 📞 ${esc(p.telefono)}</small><br>
+            <small>${entrega}</small>
+            <ul class="items">${items}</ul>
+            ${observacion}
+            <small>Pago: ${esc(p.metodo_pago)} (${esc(p.estado_pago)})</small><br>
+            <span class="estado ${claseEstado(p.estado)}">${esc(p.estado)}</span>
+            ${acciones}
+          </article>
+        `
+            })
+
+            contenedor.innerHTML = contenidohtml
+        }
+
+        async function traerPedidos() {
+            try {
+                const url = '/api/v1/admin/pedidos' + (estadoActual ? '?estado=' + encodeURIComponent(estadoActual) : '')
+                const resultado = await fetch(url)
+
+                if (resultado.status === 401) {
+                    window.location.href = '/login'
+                    return
+                }
+
+                mostrarPedidos(await resultado.json())
+            }
+            catch (error) {
+                document.getElementById('pedidos').innerHTML = '<p class="vacio">No se pudo conectar con el servidor.</p>'
+            }
+        }
+
+        function filtrar(boton) {
+            estadoActual = boton.dataset.estado
+            document.querySelectorAll('.filtro').forEach((f) => f.classList.remove('activo'))
+            boton.classList.add('activo')
+            traerPedidos()
+        }
+
+        async function cambiarEstado(id, estado) {
+            if (estado === 'cancelado' && !confirm('¿Cancelar el pedido #' + id + '?')) return
+
+            try {
+                const resultado = await fetch('/api/v1/admin/pedidos/' + id, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ estado })
+                })
+
+                if (resultado.status === 401) {
+                    window.location.href = '/login'
+                    return
+                }
+                if (!resultado.ok) {
+                    const datos = await resultado.json()
+                    alert(datos.mensaje)
+                }
+            }
+            catch (error) {
+                alert('No se pudo conectar con el servidor')
+            }
+            traerPedidos()
+        }
+
+        traerPedidos()
+        setInterval(traerPedidos, 15000)
+    </script>
+</body>
+
+</html>

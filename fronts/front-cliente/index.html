@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedí en línea - Como en Casa</title>
+    <style>
+        :root {
+            --rojo: #c8391a;
+            --rojo-osc: #a52d14;
+            --crema: #fff8ef;
+            --gris: #6b6b6b;
+            --borde: #e8dccb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, Segoe UI, Roboto, sans-serif;
+            background: #f3ece1;
+            color: #2b2b2b;
+        }
+
+        .app {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--crema);
+            padding-bottom: 90px;
+        }
+
+        header {
+            background: var(--rojo);
+            color: #fff;
+            padding: 14px 16px;
+            text-align: center;
+        }
+
+        .logo {
+            display: block;
+            width: min(100%, 280px);
+            max-height: 100px;
+            margin: 0 auto;
+            object-fit: contain;
+        }
+
+        section.vista {
+            display: none;
+            padding: 14px;
+        }
+
+        section.vista.activa {
+            display: block;
+        }
+
+        h2 {
+            font-size: 1.05rem;
+            margin: 18px 0 8px;
+            color: var(--rojo-osc);
+        }
+
+        .prod {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: #fff;
+            border: 1px solid var(--borde);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 8px;
+        }
+
+        .prod .imagen-producto {
+            width: 72px;
+            height: 72px;
+            flex: 0 0 72px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .prod .emoji {
+            width: 72px;
+            flex: 0 0 72px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .prod .info {
+            flex: 1;
+        }
+
+        .prod .info b {
+            display: block;
+        }
+
+        .prod .info small {
+            color: var(--gris);
+        }
+
+        .grid-menu {
+            display: grid;
+            gap: 12px;
+        }
+
+        .producto-card {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 12px;
+            background: #fff;
+            border: 1px solid var(--borde);
+            border-radius: 12px;
+        }
+
+        .producto-card img {
+            width: 84px;
+            height: 84px;
+            flex: 0 0 84px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .producto-card .detalle {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .producto-card h3,
+        .producto-card p {
+            margin: 0 0 6px;
+        }
+
+        .producto-card p {
+            color: var(--gris);
+            font-size: .9rem;
+        }
+
+        .producto-card .precio {
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: var(--rojo-osc);
+        }
+
+        .producto-card button {
+            padding: 8px 10px;
+            border: none;
+            border-radius: 8px;
+            background: var(--rojo);
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .precio {
+            font-weight: 700;
+            color: var(--rojo-osc);
+            white-space: nowrap;
+        }
+
+        .cant {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cant button {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: var(--rojo);
+            color: #fff;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        .cant button:disabled {
+            background: #ccc;
+        }
+
+        .barra {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 12px;
+            background: #fff;
+            border-top: 1px solid var(--borde);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: var(--rojo);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn:disabled {
+            background: #bbb;
+            cursor: not-allowed;
+        }
+
+        .btn.sec {
+            background: #fff;
+            color: var(--rojo);
+            border: 2px solid var(--rojo);
+            margin-top: 8px;
+        }
+
+        label {
+            display: block;
+            font-size: .85rem;
+            font-weight: 600;
+            margin: 10px 0 4px;
+        }
+
+        input[type=text],
+        input[type=tel],
+        input[type=email],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--borde);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #fff;
+        }
+
+        .fila {
+            display: flex;
+            gap: 8px;
+        }
+
+        .fila>div {
+            flex: 1;
+        }
+
+        .opciones {
+            display: flex;
+            gap: 8px;
+        }
+
+        .opciones label {
+            flex: 1;
+            border: 1px solid var(--borde);
+            background: #fff;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .opciones input {
+            margin-right: 6px;
+        }
+
+        .resumen {
+            background: #fff;
+            border: 1px solid var(--borde);
+            border-radius: 12px;
+            padding: 10px;
+        }
+
+        .resumen .linea {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: .95rem;
+        }
+
+        .total {
+            border-top: 1px dashed var(--borde);
+            margin-top: 6px;
+            padding-top: 8px;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .errores {
+            background: #fde8e4;
+            border: 1px solid #f1b5a8;
+            color: #8a2310;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: .9rem;
+        }
+
+        .errores ul {
+            margin: 4px 0 0 18px;
+            padding: 0;
+        }
+
+        .ok {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .ok .tilde {
+            font-size: 3rem;
+        }
+
+        .numero {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--rojo-osc);
+        }
+
+        .estado {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            margin: 8px 0;
+        }
+
+        .estado.prep {
+            background: #fff0c2;
+            color: #7a5a00;
+        }
+
+        .estado.listo {
+            background: #d8f3dc;
+            color: #1b6b34;
+        }
+
+        .estado.cancelado {
+            background: #fde8e4;
+            color: #8a2310;
+        }
+
+        .link {
+            background: none;
+            border: none;
+            color: var(--rojo);
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: .9rem;
+        }
+
+        .seguir {
+            display: flex;
+            gap: 8px;
+        }
+
+        .seguir input {
+            flex: 1;
+        }
+
+        .seguir button {
+            padding: 0 16px;
+            border: none;
+            background: var(--rojo);
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .producto-card .controles {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .producto-card .controles button {
+            min-width: 36px;
+            min-height: 36px;
+            font-size: 1.1rem;
+        }
+
+        .vista-pedido[hidden],
+        .confirmacion[hidden],
+        #campoDireccion[hidden],
+        #errores[hidden] {
+            display: none;
+        }
+
+        .formulario,
+        .confirmacion {
+            margin-top: 20px;
+            padding: 16px;
+            background: #fff;
+            border: 1px solid var(--borde);
+            border-radius: 12px;
+        }
+
+        .formulario input,
+        .formulario textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--borde);
+            border-radius: 8px;
+            font: inherit;
+        }
+
+        .formulario textarea {
+            resize: vertical;
+        }
+
+        .opciones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .opciones label {
+            margin: 0;
+            padding: 10px;
+            border: 1px solid var(--borde);
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .opciones input {
+            width: auto;
+            margin-right: 6px;
+        }
+
+        .boton-principal {
+            width: 100%;
+            margin-top: 12px;
+            padding: 14px;
+            border: 0;
+            border-radius: 10px;
+            background: var(--rojo);
+            color: #fff;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .boton-principal:disabled {
+            background: #999;
+            cursor: wait;
+        }
+
+        .errores {
+            margin-top: 12px;
+            padding: 10px;
+            border: 1px solid #f1b5a8;
+            border-radius: 8px;
+            background: #fde8e4;
+            color: #8a2310;
+        }
+
+        .barra {
+            position: sticky;
+            bottom: 0;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 12px 16px;
+            background: #fff;
+            border-top: 1px solid var(--borde);
+        }
+
+        .barra button {
+            width: 100%;
+            padding: 14px;
+            border: 0;
+            border-radius: 10px;
+            background: var(--rojo);
+            color: #fff;
+            font: inherit;
+            font-weight: 700;
+        }
+
+        .barra button:disabled {
+            background: #999;
+        }
+
+        @media (max-width: 480px) {
+            .producto-card {
+                align-items: flex-start;
+            }
+
+            .producto-card img {
+                width: 68px;
+                height: 68px;
+                flex-basis: 68px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img class="logo" src="/imagen/Logo%20de%20como%20en%20casa.webp" alt="Como en Casa">
+        <span>¡Hacé tu pedido online!</span>
+    </header>
+
+    <main>
+        <section id="vista-menu">
+            <h2>Nuestra carta</h2>
+            <button type="button" onclick="window.location.href='/'">Volver</button> <!-- Botón para volver a la página principal -->
+            <div class="grid-menu" id="catalogo">
+                <p>Cargando menú...</p>
+            </div>
+        </section>
+
+        <section class="vista-pedido" id="vista-pedido" hidden>
+            <h2>Confirmá tu pedido</h2>
+            <div class="resumen" id="resumen"></div>
+
+            <form class="formulario" id="formulario-pedido">
+                <h3>Entrega</h3>
+                <div class="opciones">
+                    <label><input type="radio" name="tipo_entrega" value="local" checked> Retiro en el local</label>
+                    <label><input type="radio" name="tipo_entrega" value="delivery"> Delivery</label>
+                </div>
+
+                <h3>Tus datos</h3>
+                <div class="fila">
+                    <div>
+                        <label for="nombre">Nombre</label>
+                        <input id="nombre" name="nombre" maxlength="80" autocomplete="given-name" required>
+                    </div>
+                    <div>
+                        <label for="apellido">Apellido</label>
+                        <input id="apellido" name="apellido" maxlength="80" autocomplete="family-name" required>
+                    </div>
+                </div>
+                <label for="telefono">Teléfono</label>
+                <input id="telefono" name="telefono" type="tel" maxlength="20" autocomplete="tel" required>
+
+                <div id="campoDireccion" hidden>
+                    <label for="direccion">Dirección de entrega</label>
+                    <input id="direccion" name="direccion" maxlength="200" autocomplete="street-address">
+                </div>
+
+                <label for="email">Email (opcional)</label>
+                <input id="email" name="email" type="email" maxlength="120" autocomplete="email">
+
+                <h3>Forma de pago</h3>
+                <div class="opciones">
+                    <label><input type="radio" name="metodo_pago" value="efectivo" checked> Efectivo</label>
+                    <label><input type="radio" name="metodo_pago" value="transferencia"> Transferencia</label>
+                    <label><input type="radio" name="metodo_pago" value="mercadopago"> Mercado Pago</label>
+                </div>
+
+                <label for="observacion">Observaciones (opcional)</label>
+                <textarea id="observacion" name="observacion" rows="3" maxlength="300"></textarea>
+                <div class="errores" id="errores" role="alert" hidden></div>
+                <button class="boton-principal" id="btn-confirmar" type="submit">Enviar pedido</button>
+                <button class="boton-principal" id="btn-volver" type="button">Volver al menú</button>
+            </form>
+        </section>
+
+        <section class="confirmacion" id="confirmacion" aria-live="polite" hidden>
+            <h2>¡Pedido guardado!</h2>
+            <p id="mensaje-confirmacion"></p>
+            <button class="boton-principal" id="btn-otro-pedido" type="button">Hacer otro pedido</button>
+        </section>
+    </main>
+
+    <div class="barra" id="barra">
+        <button type="button" id="btn-ver-pedido" disabled>Elegí tus productos</button>
+    </div>
+
+    <script>
+        let productos = []
+        const carrito = new Map()
+
+        const plata = (valor) => '$' + Number(valor).toLocaleString('es-AR')
+
+        async function cargarMenu() {
+            try {
+                const respuesta = await fetch('/api/v1/recetas')
+                if (!respuesta.ok) {
+                    throw new Error(`El servidor respondió ${respuesta.status}.`)
+                }
+                productos = await respuesta.json()
+                if (!Array.isArray(productos) || productos.length === 0) {
+                    document.getElementById('catalogo').textContent = 'No hay productos disponibles.'
+                    return
+                }
+
+                const contenedor = document.getElementById('catalogo')
+                contenedor.replaceChildren()
+                productos.forEach((producto) => {
+                    const tarjeta = document.createElement('article')
+                    tarjeta.className = 'producto-card'
+
+                    const imagen = document.createElement('img')
+                    imagen.src = producto.imagen
+                    imagen.alt = producto.nombre
+
+                    const detalle = document.createElement('div')
+                    detalle.className = 'detalle'
+
+                    const nombre = document.createElement('h3')
+                    nombre.textContent = producto.nombre
+
+                    const descripcion = document.createElement('p')
+                    descripcion.textContent = producto.descripcion || ''
+
+                    const precio = document.createElement('div')
+                    precio.className = 'precio'
+                    precio.textContent = plata(producto.precio)
+
+                    const boton = document.createElement('button')
+                    boton.type = 'button'
+                    boton.setAttribute('aria-label', `Agregar ${producto.nombre}`)
+                    boton.textContent = 'Agregar'
+                    boton.addEventListener('click', () => cambiarCantidad(producto.id, 1))
+
+                    const controles = document.createElement('div')
+                    controles.className = 'controles'
+
+                    const cantidad = document.createElement('span')
+                    cantidad.id = `cantidad-${producto.id}`
+                    cantidad.textContent = '0'
+
+                    const quitar = document.createElement('button')
+                    quitar.type = 'button'
+                    quitar.textContent = '−'
+                    quitar.setAttribute('aria-label', `Quitar ${producto.nombre}`)
+                    quitar.disabled = true
+                    quitar.id = `quitar-${producto.id}`
+                    quitar.addEventListener('click', () => cambiarCantidad(producto.id, -1))
+
+                    controles.append(quitar, cantidad, boton)
+                    detalle.append(nombre, descripcion, precio, controles)
+                    tarjeta.append(imagen, detalle)
+                    contenedor.append(tarjeta)
+                })
+                actualizarBarra()
+            } catch (error) {
+                console.error('No se pudo cargar el menú:', error)
+                document.getElementById('catalogo').textContent = 'No se pudo cargar el menú. Probá de nuevo más tarde.'
+            }
+        }
+
+        function cambiarCantidad(id, cambio) {
+            const cantidad = Math.max(0, Math.min(99, (carrito.get(id) || 0) + cambio))
+            if (cantidad === 0) carrito.delete(id)
+            else carrito.set(id, cantidad)
+
+            document.getElementById(`cantidad-${id}`).textContent = cantidad
+            document.getElementById(`quitar-${id}`).disabled = cantidad === 0
+            actualizarBarra()
+        }
+
+        function calcularTotal() {
+            return productos.reduce((total, producto) => {
+                return total + producto.precio * (carrito.get(producto.id) || 0)
+            }, 0)
+        }
+
+        function actualizarBarra() {
+            const unidades = [...carrito.values()].reduce((total, cantidad) => total + cantidad, 0)
+            const boton = document.getElementById('btn-ver-pedido')
+            boton.disabled = unidades === 0
+            boton.textContent = unidades === 0
+                ? 'Elegí tus productos'
+                : `Ver pedido (${unidades}) · ${plata(calcularTotal())}`
+        }
+
+        function mostrarResumen() {
+            const resumen = document.getElementById('resumen')
+            resumen.replaceChildren()
+            productos.forEach((producto) => {
+                const cantidad = carrito.get(producto.id) || 0
+                if (!cantidad) return
+                const linea = document.createElement('div')
+                linea.className = 'linea'
+                const texto = document.createElement('span')
+                texto.textContent = `${cantidad} × ${producto.nombre}`
+                const subtotal = document.createElement('span')
+                subtotal.textContent = plata(cantidad * producto.precio)
+                linea.append(texto, subtotal)
+                resumen.append(linea)
+            })
+
+            const total = document.createElement('div')
+            total.className = 'linea total'
+            total.innerHTML = '<strong>Total</strong>'
+            const monto = document.createElement('strong')
+            monto.textContent = plata(calcularTotal())
+            total.append(monto)
+            resumen.append(total)
+        }
+
+        function cambiarVistaPedido(mostrar) {
+            document.getElementById('vista-menu').hidden = mostrar
+            document.getElementById('vista-pedido').hidden = !mostrar
+            document.getElementById('confirmacion').hidden = true
+            document.getElementById('barra').hidden = mostrar
+            window.scrollTo(0, 0)
+        }
+
+        document.querySelectorAll('input[name="tipo_entrega"]').forEach((opcion) => {
+            opcion.addEventListener('change', () => {
+                const esDelivery = document.querySelector('input[name="tipo_entrega"]:checked').value === 'delivery'
+                document.getElementById('campoDireccion').hidden = !esDelivery
+                document.getElementById('direccion').required = esDelivery
+            })
+        })
+
+        document.getElementById('btn-ver-pedido').addEventListener('click', () => {
+            mostrarResumen()
+            cambiarVistaPedido(true)
+        })
+
+        document.getElementById('btn-volver').addEventListener('click', () => cambiarVistaPedido(false))
+
+        
+        document.getElementById('formulario-pedido').addEventListener('submit', async (evento) => {
+            evento.preventDefault()
+            const boton = document.getElementById('btn-confirmar')
+            const cajaErrores = document.getElementById('errores')
+            cajaErrores.hidden = true
+            boton.disabled = true
+
+            const pedido = {
+                tipo_entrega: document.querySelector('input[name="tipo_entrega"]:checked').value,
+                metodo_pago: document.querySelector('input[name="metodo_pago"]:checked').value,
+                observacion: document.getElementById('observacion').value,
+                cliente: {
+                    nombre: document.getElementById('nombre').value,
+                    apellido: document.getElementById('apellido').value,
+                    telefono: document.getElementById('telefono').value,
+                    direccion: document.getElementById('direccion').value,
+                    email: document.getElementById('email').value
+                },
+                items: [...carrito].map(([id, cantidad]) => ({ id_producto: id, cantidad }))
+            }
+
+            try {
+                const respuesta = await fetch('/api/v1/pedidos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(pedido)
+                })
+                const resultado = await respuesta.json()
+                if (!respuesta.ok) {
+                    const errores = resultado.errores || [resultado.mensaje || 'No se pudo guardar el pedido.']
+                    cajaErrores.textContent = errores.join(' ')
+                    cajaErrores.hidden = false
+                    return
+                }
+
+                document.getElementById('mensaje-confirmacion').textContent =
+                    `Tu pedido N.º ${resultado.id_pedido} fue recibido. Total: ${plata(resultado.monto_total)}.`
+                document.getElementById('vista-menu').hidden = true
+                document.getElementById('vista-pedido').hidden = true
+                document.getElementById('barra').hidden = true
+                document.getElementById('confirmacion').hidden = false
+                carrito.clear()
+                window.scrollTo(0, 0)
+            } catch (error) {
+                console.error('No se pudo enviar el pedido:', error)
+                cajaErrores.textContent = 'No se pudo conectar con el servidor. El pedido no se guardó; intentá nuevamente.'
+                cajaErrores.hidden = false
+            } finally {
+                boton.disabled = false
+            }
+        })
+
+        document.getElementById('btn-otro-pedido').addEventListener('click', () => {
+            document.getElementById('formulario-pedido').reset()
+            document.getElementById('campoDireccion').hidden = true
+            document.getElementById('direccion').required = false
+            productos.forEach((producto) => {
+                document.getElementById(`cantidad-${producto.id}`).textContent = '0'
+                document.getElementById(`quitar-${producto.id}`).disabled = true
+            })
+            document.getElementById('confirmacion').hidden = true
+            document.getElementById('vista-menu').hidden = false
+            document.getElementById('barra').hidden = false
+            actualizarBarra()
+            window.scrollTo(0, 0)
+        })
+
+        cargarMenu()
+    </script>
+</body>
+
+</html>

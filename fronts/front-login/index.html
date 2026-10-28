@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingreso - Como en Casa</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f3ece1;
+            font-family: system-ui, Segoe UI, sans-serif;
+        }
+
+        form {
+            background: #fff;
+            padding: 28px;
+            border-radius: 14px;
+            width: min(340px, 90vw);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, .1);
+        }
+
+        .logo {
+            display: block;
+            width: min(100%, 240px);
+            max-height: 90px;
+            margin: 0 auto 4px;
+            object-fit: contain;
+        }
+
+        p.sub {
+            margin: 0 0 16px;
+            text-align: center;
+            color: #6b6b6b;
+            font-size: .9rem;
+        }
+
+        label {
+            display: block;
+            font-size: .85rem;
+            font-weight: 600;
+            margin: 10px 0 4px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e8dccb;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 16px;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: #c8391a;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        #error {
+            color: #8a2310;
+            background: #fde8e4;
+            border-radius: 8px;
+            padding: 8px;
+            font-size: .85rem;
+            margin-top: 10px;
+            display: none;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 14px;
+            font-size: .85rem;
+            color: #c8391a;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="/autenticar" method="post">
+        <h1>Ingreso administrador</h1>
+        <label for="usuario">Usuario</label>
+        <input id="usuario" name="usuario" type="text" autocomplete="username" required>
+
+        <label for="pass">Contraseña</label>
+        <input id="pass" name="pass" type="password" autocomplete="current-password" required>
+
+        <div id="error" role="alert"></div>
+        <button type="submit">Ingresar</button> <!-- Botón para enviar el formulario -->
+        <button type="button" onclick="window.location.href='/'">Volver</button> <!-- Botón para volver a la página principal -->
+    </form>
+
+    <!-- AQUÍ VA EL SCRIPT -->
+    <script>
+        const form = document.querySelector('form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const usuario = document.getElementById('usuario').value;
+            const pass = document.getElementById('pass').value;
+            const cajaError = document.getElementById('error');
+
+            try {
+                const respuesta = await fetch('/autenticar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ usuario, pass })
+                });
+
+                const resultado = await respuesta.json();
+
+                if (respuesta.ok) {
+                    window.location.href = '/admin';
+                } else {
+                    cajaError.textContent = resultado.mensaje || 'Error al iniciar sesión';
+                    cajaError.style.display = 'block';
+                }
+            } catch (error) {
+                cajaError.textContent = 'No se pudo conectar con el servidor';
+                cajaError.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>

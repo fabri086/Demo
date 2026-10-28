@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotiseria - Como en Casa</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: #f3ece1;
+            font-family: system-ui, Segoe UI, sans-serif;
+        }
+
+        header {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: block;
+            width: min(100%, 280px);
+            max-height: 100px;
+            margin: 0 auto;
+            object-fit: contain;
+        }
+
+        .btn-admin {
+            color: #6b6b6b;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: .9rem;
+            border: 1px solid #e8dccb;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: #fff;
+            transition: all 0.2s;
+        }
+
+        .btn-admin:hover {
+            border-color: #c8391a;
+            color: #c8391a;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #222;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #6b6b6b;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        .btn-pedido {
+            background: #c8391a;
+            color: #fff;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 14px rgba(200, 57, 26, 0.3);
+            transition: background 0.2s;
+        }
+
+        .btn-pedido:hover {
+            background: #b23217;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img class="logo" src="/imagen/Logo%20de%20como%20en%20casa.webp" alt="Como en Casa">
+        <a href="/admin/" class="btn-admin">Acceder como Admin</a>
+    </header>
+
+    <main>
+        <h1>Bienvenido a Como en Casa</h1>
+        <p>Disfruta de las mejores comidas caseras preparadas con dedicación. Hacé tu pedido online de forma rápida y
+            sencilla.</p>
+
+        <!-- Botón principal que lleva al menú del cliente (según tu dibujo) -->
+        <a href="/cliente/" class="btn-pedido">Hacer Pedido</a>
+    </main>
+</body>
+
+</html>
