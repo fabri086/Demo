@@ -55,6 +55,14 @@
             box-sizing: border-box;
         }
 
+        .password-container {
+            position: relative;
+        }
+
+        .password-container input {
+            padding-right: 84px;
+        }
+
         button {
             width: 100%;
             margin-top: 16px;
@@ -66,6 +74,19 @@
             font-weight: 700;
             font-size: 1rem;
             cursor: pointer;
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 8px;
+            transform: translateY(-50%);
+            width: auto;
+            margin: 0;
+            padding: 6px;
+            background: transparent;
+            color: #c8391a;
+            font-size: .85rem;
         }
 
         #error {
@@ -95,7 +116,11 @@
         <input id="usuario" name="usuario" type="text" autocomplete="username" required>
 
         <label for="pass">Contraseña</label>
-        <input id="pass" name="pass" type="password" autocomplete="current-password" required>
+        <div class="password-container">
+            <input id="pass" name="pass" type="password" autocomplete="current-password" required>
+            <button id="toggle-pass" class="password-toggle" type="button" aria-label="Mostrar contraseña"
+                aria-pressed="false">Mostrar</button>
+        </div>
 
         <div id="error" role="alert"></div>
         <button type="submit">Ingresar</button> <!-- Botón para enviar el formulario -->
@@ -106,6 +131,18 @@
     <!-- AQUÍ VA EL SCRIPT -->
     <script>
         const form = document.querySelector('form');
+        const campoPass = document.getElementById('pass');
+        const botonToggle = document.getElementById('toggle-pass');
+
+        botonToggle.addEventListener('click', () => {
+            const mostrar = campoPass.type === 'password';
+
+            campoPass.type = mostrar ? 'text' : 'password';
+            botonToggle.textContent = mostrar ? 'Ocultar' : 'Mostrar';
+            botonToggle.setAttribute('aria-label', mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña');
+            botonToggle.setAttribute('aria-pressed', String(mostrar));
+        });
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
