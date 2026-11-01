@@ -99,7 +99,8 @@
 
         <div id="error" role="alert"></div>
         <button type="submit">Ingresar</button> <!-- Botón para enviar el formulario -->
-        <button type="button" onclick="window.location.href='/'">Volver</button> <!-- Botón para volver a la página principal -->
+        <button type="button" onclick="window.location.href='/'">Volver</button>
+        <!-- Botón para volver a la página principal -->
     </form>
 
     <!-- AQUÍ VA EL SCRIPT -->
@@ -131,20 +132,6 @@
                 cajaError.textContent = 'No se pudo conectar con el servidor';
                 cajaError.style.display = 'block';
             }
-        });
-
-        <!-- este método permite mostrar u ocultar la contraseña -->
-        const campoPass = document.getElementById('pass');
-        const botonToggle = document.getElementById('toggle-pass');
-
-        botonToggle.addEventListener('click', () => {
-            const mostrar = campoPass.type === 'password';
-
-            campoPass.type = mostrar ? 'text' : 'password';
-            botonToggle.textContent = mostrar ? 'Ocultar' : 'Mostrar';
-            botonToggle.setAttribute('aria-label',
-                mostrar ? 'Ocultar contraseña' : 'Mostrar contraseña');
-            botonToggle.setAttribute('aria-pressed', String(mostrar));
         });
     </script>
 </body>
