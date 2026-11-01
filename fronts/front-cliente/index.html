@@ -7,8 +7,8 @@
     <title>Pedí en línea - Como en Casa</title>
     <style>
         :root {
-            --rojo: #c8391a;
-            --rojo-osc: #a52d14;
+            --rojo: #000000;
+            --rojo-osc: #e70000;
             --crema: #fff8ef;
             --gris: #6b6b6b;
             --borde: #e8dccb;
@@ -35,15 +35,15 @@
 
         header {
             background: var(--rojo);
-            color: #fff;
-            padding: 14px 16px;
+            color: #e70000;
+            padding: 16px 22px;
             text-align: center;
         }
 
         .logo {
             display: block;
-            width: min(100%, 280px);
-            max-height: 100px;
+           width: min(100%, 420px);
+            max-height: 500px;
             margin: 0 auto;
             object-fit: contain;
         }
@@ -618,7 +618,7 @@
                     const boton = document.createElement('button')
                     boton.type = 'button'
                     boton.setAttribute('aria-label', `Agregar ${producto.nombre}`)
-                    boton.textContent = 'Agregar'
+                    boton.textContent = '+'
                     boton.addEventListener('click', () => cambiarCantidad(producto.id, 1))
 
                     const controles = document.createElement('div')

@@ -16,21 +16,28 @@
         }
 
         header {
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            position: relative;
+            background: var(--rojo);
+            color: #fff;
+            Background: #010101;
+            padding: 14px 16px;
+            text-align: center;
+
         }
 
         .logo {
             display: block;
-            width: min(100%, 280px);
-            max-height: 100px;
+            width: min(100%, 420px);
+            max-height: 500px;
             margin: 0 auto;
             object-fit: contain;
         }
 
         .btn-admin {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
             color: #6b6b6b;
             text-decoration: none;
             font-weight: 600;
@@ -93,7 +100,7 @@
 <body>
     <header>
         <img class="logo" src="/imagen/Logo%20de%20como%20en%20casa.webp" alt="Como en Casa">
-        <a href="/admin/" class="btn-admin">Acceder como Admin</a>
+        <a href="/admin/" class="btn-admin">Ingreso como Admin</a>
     </header>
 
     <main>
