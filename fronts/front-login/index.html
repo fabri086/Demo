@@ -99,7 +99,8 @@
 
         <div id="error" role="alert"></div>
         <button type="submit">Ingresar</button> <!-- Botón para enviar el formulario -->
-        <button type="button" onclick="window.location.href='/'">Volver</button> <!-- Botón para volver a la página principal -->
+        <button type="button" onclick="window.location.href='/'">Volver</button>
+        <!-- Botón para volver a la página principal -->
     </form>
 
     <!-- AQUÍ VA EL SCRIPT -->
@@ -132,6 +133,11 @@
                 cajaError.style.display = 'block';
             }
         });
+
+         <!-- Esta función permite mostrar/ocultar la contraseña -->
+        const passInput = document.getElementById('pass');
+
+        passInput.type = passInput.type === 'password' ? 'text' : 'password';
     </script>
 </body>
 
